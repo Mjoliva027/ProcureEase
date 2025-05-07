@@ -1,39 +1,52 @@
-// Login Form AJAX
+// ======================= LOGIN FORM =======================
 const loginForm = document.querySelector('.login-form');
-loginForm.addEventListener('submit', function(e) {
-  e.preventDefault();
-
-  const email = document.querySelector('input[name="email"]').value;
-  const password = document.querySelector('input[name="password"]').value;
-
-  const data = new FormData();
-  data.append('email', email);
-  data.append('password', password);
-
-  fetch('login_server.php', {
-    method: 'POST',
-    body: data
-  })
-  .then(response => response.text())
-  .then(responseText => {
-    if (responseText.startsWith('redirect:')) {
-      window.location.href = responseText.replace('redirect:', '');
-    } else {
-      alert(responseText); // Show error message
-    }
-  })
-  .catch(error => console.error('Error:', error));
-});
-
-// Sign Up Form AJAX
-const signupForm = document.querySelector('.signup-form');
-signupForm.addEventListener('submit', function(e) {
+if (loginForm) {
+  loginForm.addEventListener('submit', function (e) {
     e.preventDefault();
 
-    const name = document.querySelector('input[name="name"]').value;
-    const email = document.querySelector('input[name="email"]').value;
-    const password = document.querySelector('input[name="password"]').value;
-    const role = document.querySelector('select[name="role"]').value;
+    const email = loginForm.querySelector('input[name="email"]').value.trim();
+    const password = loginForm.querySelector('input[name="password"]').value;
+
+    if (!email || !password) {
+      alert('Please enter both email and password.');
+      return;
+    }
+
+    const data = new FormData();
+    data.append('email', email);
+    data.append('password', password);
+
+    fetch('login_server.php', {
+      method: 'POST',
+      body: data
+    })
+      .then(response => response.text())
+      .then(responseText => {
+        if (responseText.startsWith('redirect:')) {
+          window.location.href = responseText.replace('redirect:', '');
+        } else {
+          alert(responseText);
+        }
+      })
+      .catch(error => console.error('Login Error:', error));
+  });
+}
+
+// ======================= SIGNUP FORM =======================
+const signupForm = document.querySelector('.signup-form');
+if (signupForm) {
+  signupForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const name = signupForm.querySelector('input[name="name"]').value.trim();
+    const email = signupForm.querySelector('input[name="email"]').value.trim();
+    const password = signupForm.querySelector('input[name="password"]').value;
+    const role = signupForm.querySelector('select[name="role"]').value;
+
+    if (!name || !email || !password || role === 'invalid') {
+      alert('Please fill out all fields and select a valid role.');
+      return;
+    }
 
     const data = new FormData();
     data.append('name', name);
@@ -42,49 +55,39 @@ signupForm.addEventListener('submit', function(e) {
     data.append('role', role);
 
     fetch('signup_server.php', {
-        method: 'POST',
-        body: data
+      method: 'POST',
+      body: data
     })
-    .then(response => response.text())
-    .then(responseText => {
+      .then(response => response.text())
+      .then(responseText => {
         if (responseText.startsWith('redirect:')) {
-            // Check if the redirection is to the login page
-            const redirectUrl = responseText.replace('redirect:', '');
-            
-            // Update form view to show the login form
-            formContainer.style.transform = 'translateX(0)'; // Show Login form
+          window.location.href = responseText.replace('redirect:', '');
         } else {
-            alert(responseText); // Show error message
+          alert(responseText);
         }
-    })
-    .catch(error => console.error('Error:', error));
-});
+      })
+      .catch(error => console.error('Signup Error:', error));
+  });
+}
 
+// ======================= TOGGLE FORMS =======================
 const formContainer = document.getElementById('form-container');
 const showSignupBtn = document.getElementById('show-signup');
 const showLoginBtn = document.getElementById('show-login');
 
-// Clear the form fields when switching to the Sign Up form
-showSignupBtn.addEventListener('click', () => {
-  // Clear Login form fields
-  const loginForm = document.querySelector('.login-form');
-  loginForm.reset();  // Reset the login form fields
+if (showSignupBtn && showLoginBtn && formContainer) {
+  showSignupBtn.addEventListener('click', () => {
+    loginForm.reset();
+    formContainer.style.transform = 'translateX(-50%)';
+  });
 
-  // Switch to Sign Up form
-  formContainer.style.transform = 'translateX(-50%)';
-});
+  showLoginBtn.addEventListener('click', () => {
+    signupForm.reset();
+    formContainer.style.transform = 'translateX(0)';
+  });
+}
 
-// Clear the form fields when switching to the Login form
-showLoginBtn.addEventListener('click', () => {
-  // Clear Sign Up form fields
-  const signupForm = document.querySelector('.signup-form');
-  signupForm.reset();  // Reset the signup form fields
-
-  // Switch to Login form
-  formContainer.style.transform = 'translateX(0)';
-});
-
-// Fade in login form from the left on page load
+// ======================= ANIMATION ON LOAD =======================
 window.addEventListener('DOMContentLoaded', () => {
   anime({
     targets: '#login-wrapper',
