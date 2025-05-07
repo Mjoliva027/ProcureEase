@@ -14,7 +14,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'government') {
 <head>
     <meta charset="UTF-8">
     <title>Government Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script> 
 </head>
 <body class="bg-gray-100">
 
