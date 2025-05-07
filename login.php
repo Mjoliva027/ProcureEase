@@ -42,29 +42,28 @@
 </div>
 
 
-       <!-- Container for Centering the Form -->
+    <!-- Sign Up Form Container -->
 <div class="w-full h-screen flex justify-center items-center">
   <div class="w-[450px] p-8 border-2 border-gray-300 rounded-xl bg-white shadow-lg">
-    <!-- Sign Up Form -->
-<h2 class="text-3xl font-bold text-amber-500 mb-6 text-center">Sign Up</h2>
-<form class="space-y-4 signup-form">
-  <input type="text" name="name" placeholder="Full Name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500" />
-  <input type="email" name="email" placeholder="Email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500" />
-  <input type="password" name="password" placeholder="Password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500" />
+    <h2 class="text-3xl font-bold text-amber-500 mb-6 text-center">Sign Up</h2>
+    <form class="space-y-4 signup-form">
+      <input type="text" name="name" placeholder="Full Name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500" />
+      <input type="email" name="email" placeholder="Email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500" />
+      <input type="password" name="password" placeholder="Password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500" />
 
-  <!-- Role Selection -->
-  <select name="role" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
-    <option value="" disabled selected>Select Role</option>
-    <option value="supplier">Supplier</option>
-    <option value="government">Government</option>
-  </select>
+      <!-- Role Selection (value="invalid" avoids empty default issues) -->
+      <select name="role" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+        <option value="invalid" selected disabled>Select Role</option>
+        <option value="supplier">Supplier</option>
+        <option value="government">Government</option>
+      </select>
 
-  <button type="submit" class="w-full bg-amber-500 text-white py-2 rounded-lg hover:bg-amber-600 font-semibold">Sign Up</button>
-</form>
-<p class="mt-6 text-sm text-center">
-  Already have an account?
-  <button id="show-login" class="text-amber-500 font-semibold hover:underline">Login</button>
-</p>
+      <button type="submit" class="w-full bg-amber-500 text-white py-2 rounded-lg hover:bg-amber-600 font-semibold">Sign Up</button>
+    </form>
+    <p class="mt-6 text-sm text-center">
+      Already have an account?
+      <button id="show-login" class="text-amber-500 font-semibold hover:underline">Login</button>
+    </p>
   </div>
 </div>
 
