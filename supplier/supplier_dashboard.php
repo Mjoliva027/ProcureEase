@@ -49,7 +49,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'supplier') {
             <i data-feather="box"></i><span class="sidebar-text">Your Products</span>
         </a>
     </nav>
-    <a href="logout.php" class="mt-auto bg-red-500 text-center p-3 rounded hover:bg-red-600 flex items-center justify-center space-x-2">
+    <a href="../logout.php" class="mt-auto bg-red-500 text-center p-3 rounded hover:bg-red-600 flex items-center justify-center space-x-2">
         <i data-feather="log-out"></i><span class="sidebar-text">Logout</span>
     </a>
 </aside>
