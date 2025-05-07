@@ -3,10 +3,10 @@ include('./includes/db_connect.php');
 session_start();
 
 // Check if the user is a government and logged in
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'government') {
-    header('Location: login.php');
-    exit();
-}
+//if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'government') {
+    //header('Location: login.php');
+    //exit();
+//}
 ?>
 
 <!DOCTYPE html>
