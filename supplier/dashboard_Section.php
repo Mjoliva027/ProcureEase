@@ -8,6 +8,7 @@
             <div>
                 <h4 class="text-lg font-semibold">Total Products</h4>
                 <p class="text-gray-600">You have 10 products</p>
+                <!-- hiidfedri -->
             </div>
         </div>
         <div class="bg-white p-6 rounded-lg shadow flex items-center space-x-4">
