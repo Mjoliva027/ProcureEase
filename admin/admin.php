@@ -138,6 +138,7 @@ const engagementChart = new Chart(document.getElementById('engagementChart'), {
             backgroundColor: 'rgba(34, 197, 94, 0.2)',
             borderColor: 'rgba(34, 197, 94, 1)',
             tension: 0.3
+            // yeah
         }]
     },
     options: {
