@@ -17,7 +17,7 @@ $pendingProducts = $conn->query("SELECT p.product_id, p.product_name, g.agency_n
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Government Dashboard</title>
+    <title>Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -31,7 +31,7 @@ $pendingProducts = $conn->query("SELECT p.product_id, p.product_name, g.agency_n
 </nav>
 
 <div class="max-w-7xl mx-auto p-8 space-y-16">
-    <h2 class="text-4xl font-bold text-amber-500">Government Dashboard</h2>
+    <h2 class="text-4xl font-bold text-amber-500">Admin Dashboard</h2>
 
     <!-- User Moderation -->
     <section>
