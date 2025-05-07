@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             } else {
                 // Redirect to dashboard based on role
                 if ($user['role'] == 'supplier') {
-                    echo "redirect:supplier_dashboard.php";
+                    echo "redirect:./supplier/supplier_dashboard.php";
                 } elseif ($user['role'] == 'government') {
                     echo "redirect:government_dashboard.php";
                 } elseif ($user['role'] == 'admin') {
