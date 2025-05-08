@@ -7,8 +7,8 @@
             </div>
             <div>
                 <h4 class="text-lg font-semibold">Total Products</h4>
-                <p class="text-gray-600">You have 10 products</p>
-                <!-- hiidfedri -->
+                <p class="text-gray-600" id="totalProductCount">Loading...</p>
+                
             </div>
         </div>
         <div class="bg-white p-6 rounded-lg shadow flex items-center space-x-4">
@@ -68,3 +68,19 @@
         </div>
     </div>
 
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    fetch('total_products.php')
+        .then(res => res.json())
+        .then(data => {
+            const totalCount = data.total ?? 0;
+            document.getElementById('totalProductCount').textContent = 
+                `You have ${totalCount} product${totalCount !== 1 ? 's' : ''}`;
+        })
+        .catch(err => {
+            console.error('Failed to load total products:', err);
+            document.getElementById('totalProductCount').textContent = 
+                'Failed to load count';
+        });
+});
+</script>
