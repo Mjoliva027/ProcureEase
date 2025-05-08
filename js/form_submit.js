@@ -1,4 +1,3 @@
-// form_submit.js
 document.addEventListener('DOMContentLoaded', () => {
     const supplierForm = document.getElementById('supplierForm');
     const governmentForm = document.getElementById('governmentForm');
@@ -36,16 +35,12 @@ function submitForm(role) {
     })
     .then(response => response.text())
     .then(data => {
-        if (data.trim() === 'success') {
-            alert('Form submitted successfully!');
-            window.location.href = role === 'supplier' ? 'supplier_dashboard.php' : 'government_dashboard.php';
+        if (data.trim() === 'submitted') {
+            alert('Form submitted successfully! Please wait for admin approval.');
+            window.location.href = 'login.php';
         } else {
             alert('Error: ' + data);
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Something went wrong!');
     });
 }
 
