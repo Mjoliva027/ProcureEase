@@ -43,13 +43,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 } elseif ($user['role'] == 'government') {
                     echo "redirect:government_dashboard.php";
                 } elseif ($user['role'] == 'admin') {
-                    echo "redirect:admin_dashboard.php";
+                    echo "redirect:./admin/admin_dashboard.php";
                 }
             }
         } else {
             // Debugging: Log invalid password attempt
             echo "error:Invalid password";
-            // error_log('Invalid password for email: ' . $email);
+             error_log('Invalid password for email: ' . $email);
         }
     } else {
         echo "error:User not found";
