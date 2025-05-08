@@ -20,15 +20,22 @@ if (loginForm) {
       method: 'POST',
       body: data
     })
-      .then(response => response.text())
-      .then(responseText => {
-        if (responseText.startsWith('redirect:')) {
-          window.location.href = responseText.replace('redirect:', '');
-        } else {
-          alert(responseText);
-        }
-      })
-      .catch(error => console.error('Login Error:', error));
+    .then(response => response.text())
+    .then(responseText => {
+      if (responseText.startsWith('redirect:')) {
+        const target = responseText.replace('redirect:', '');
+        window.location.href = target;
+      } else if (responseText.startsWith('error:')) {
+        const errorMsg = responseText.replace('error:', '');
+        alert(errorMsg);
+      } else {
+        alert('Unexpected response: ' + responseText);
+      }
+    })
+    .catch(error => {
+      console.error('Login Error:', error);
+      alert('Something went wrong. Please try again.');
+    });
   });
 }
 
