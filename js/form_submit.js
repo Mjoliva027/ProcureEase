@@ -39,7 +39,7 @@ function submitForm(role) {
             alert('Form submitted successfully! Please wait for admin approval.');
             window.location.href = 'login.php';
         } else {
-            alert('Error: ' + data);
+            alert('' + data);
         }
     });
 }
