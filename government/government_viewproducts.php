@@ -1,6 +1,6 @@
 <?php
 include('../includes/db_connect.php');
-session_start();
+
 
 
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'government') {
@@ -32,12 +32,6 @@ $result = mysqli_query($conn, $query);
 </head>
 <body class="bg-gray-100 p-8">
     <h2 class="text-3xl font-bold text-amber-500 mb-6">Available Products</h2>
-    <?php if (!$subscribed): ?>
-        <div class="bg-yellow-200 p-4 mb-4 rounded text-yellow-800">
-            You are viewing a limited list of products. <a href="government_subscription.php" class="underline">Subscribe now</a> to unlock full access.
-        </div>
-    <?php endif; ?>
-
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <?php while($row = mysqli_fetch_assoc($result)): ?>
             <div class="bg-white p-4 rounded shadow">
