@@ -48,6 +48,10 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'supplier') {
         <a href="#" data-target="yourProductsSection" class="nav-link flex items-center space-x-3 p-3 rounded hover:bg-gray-700">
             <i data-feather="box"></i><span class="sidebar-text">Your Products</span>
         </a>
+        <a href="#" data-target="salesSection" class="nav-link flex items-center space-x-3 p-3 rounded hover:bg-gray-700">
+    <i data-feather="bar-chart-2"></i><span class="sidebar-text">Sales</span>
+</a>
+
     </nav>
     <a href="../logout.php" class="mt-auto bg-red-500 text-center p-3 rounded hover:bg-red-600 flex items-center justify-center space-x-2">
         <i data-feather="log-out"></i><span class="sidebar-text">Logout</span>
@@ -72,7 +76,14 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'supplier') {
         <?php include './your_products_section.php'; ?>
     </section>
 
+     <!-- Sales Section -->
+     <section id="salesSection" class="hidden" style="margin-top:-5px;">
+        <?php include './sales_section.php'; ?>
+    </section>
+
+
 </main>
+<script src="../js/fetch_products.js"></script>
 <script src="../js/product_submit.js"> </script>
 <script>
     feather.replace();
