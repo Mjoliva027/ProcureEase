@@ -35,6 +35,29 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
         </div>
     </div>
 </nav>
+ <!-- Subscription Suggestion -->
+            <?php
+          $subscribed = false;
+
+          $sub_query = "SELECT * FROM subscriptions WHERE government_id = $government_id AND status = 'active' ORDER BY start_date DESC LIMIT 1";
+          $sub_result = mysqli_query($conn, $sub_query);
+          
+          if ($sub_result && mysqli_num_rows($sub_result) > 0) {
+              $subscription = mysqli_fetch_assoc($sub_result);
+              $today = date('Y-m-d');
+          
+              // Check if today is within the subscription period
+              if ($today >= $subscription['start_date'] && $today <= $subscription['end_date']) {
+                  $subscribed = true;
+              }
+          }
+          
+          if (!$subscribed):
+          ?>
+              <div class="bg-yellow-200 p-4 mt-0 rounded text-yellow-800">
+                  <p>You are viewing limited product suggestions. <a href="?page=subscription" class="underline text-amber-500">Subscribe now</a> to unlock full access.</p>
+              </div>
+          <?php endif; ?>
 
 <!-- Main Content -->
 <main class="container mx-auto p-8">
@@ -43,47 +66,38 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
         case 'home':
             echo "<h2 class='text-3xl font-bold text-amber-500 mb-6'>Welcome, Government User</h2>";
             echo "<p class='text-gray-600'>This is your dashboard home.</p>";
-            break;
 
-        case 'products':
-            // Subscription check
-            $subscribed = false;
-            $sub_query = "SELECT * FROM subscriptions WHERE government_id = $government_id AND status = 'active'";
-            $sub_result = mysqli_query($conn, $sub_query);
-            if (mysqli_num_rows($sub_result) > 0) {
-                $subscribed = true;
-            }
-
-            $product_limit = $subscribed ? "" : "LIMIT 5";
-            $query = "SELECT * FROM products ORDER BY created_at DESC $product_limit";
-            $result = mysqli_query($conn, $query);
+            // Product suggestions
+            $suggestions_query = "SELECT * FROM products ORDER BY created_at DESC LIMIT 3";
+            $suggestions_result = mysqli_query($conn, $suggestions_query);
             ?>
-            <h2 class="text-3xl font-bold text-amber-500 mb-6">Available Products</h2>
-            <?php if (!$subscribed): ?>
-                <div class="bg-yellow-200 p-4 mb-4 rounded text-yellow-800">
-                    You are viewing a limited list of products. <a href="?page=subscription" class="underline">Subscribe now</a> to unlock full access.
+            
+            <div class="mt-8">
+                <h3 class="text-2xl font-semibold text-amber-500 mb-4">Product Suggestions</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <?php while($row = mysqli_fetch_assoc($suggestions_result)): ?>
+                        <div class="bg-white p-4 rounded shadow">
+                            <h3 class="text-xl font-semibold"><?= htmlspecialchars($row['product_name']) ?></h3>
+                            <p class="text-gray-600"><?= htmlspecialchars($row['description']) ?></p>
+                            <p class="mt-2 text-green-600 font-bold">₱<?= number_format($row['price'], 2) ?></p>
+                        </div>
+                    <?php endwhile; ?>
                 </div>
-            <?php endif; ?>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <?php while($row = mysqli_fetch_assoc($result)): ?>
-                    <div class="bg-white p-4 rounded shadow">
-                        <h3 class="text-xl font-semibold"><?= htmlspecialchars($row['product_name']) ?></h3>
-                        <p class="text-gray-600"><?= htmlspecialchars($row['description']) ?></p>
-                        <p class="mt-2 text-green-600 font-bold">₱<?= number_format($row['price'], 2) ?></p>
-                    </div>
-                <?php endwhile; ?>
             </div>
+
             <?php
             break;
 
+        case 'products':
+            include 'government_viewproducts.php';
+            break;
+
         case 'subscription':
-            echo "<h2 class='text-3xl font-bold text-amber-500 mb-6'>Subscription</h2>";
-            echo "<p class='text-gray-600'>Here you can manage your subscription plan. (Placeholder content)</p>";
+            include 'government_subscription.php';
             break;
 
         case 'profile':
-            echo "<h2 class='text-3xl font-bold text-amber-500 mb-6'>Your Profile</h2>";
-            echo "<p class='text-gray-600'>Update your profile details here. (Placeholder content)</p>";
+            include 'government_profile.php';
             break;
 
         default:
@@ -91,6 +105,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
     }
     ?>
 </main>
+
 
 <script>feather.replace()</script>
 </body>

@@ -1,6 +1,6 @@
 <?php
 include('../includes/db_connect.php');
-session_start();
+
 
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'government') {
     header('Location: login.php');
