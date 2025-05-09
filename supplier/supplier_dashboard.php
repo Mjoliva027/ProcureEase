@@ -68,7 +68,7 @@ $supplier = $result->fetch_assoc();
     </div> 
     <p class="sidebar-text text-sm text-gray-300 pl-6 mb-5">Welcome, Supplier</p>
 <!-- Profile Section -->
-<div class="flex flex-col items-center mb-8">
+<div class="flex flex-col items-center mb-">
     <!-- Profile Image -->
     <img src="<?php echo htmlspecialchars($profileImage); ?>" alt="Profile" class="w-16 h-16 rounded-full border-4 border-amber-500 object-cover mb-2">
     
