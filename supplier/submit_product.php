@@ -7,11 +7,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['user_role'] == 'supplier'
     $product_name = $_POST['product_name'];
     $product_description = $_POST['product_description'];
     $product_price = $_POST['product_price'];
+    $product_quantity = $_POST['product_quantity'];
     $user_id = $_SESSION['user_id'];
 
-    // Insert product details into the products table
-    $stmt = $conn->prepare("INSERT INTO products (user_id, product_name, product_description, product_price) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("issd", $user_id, $product_name, $product_description, $product_price);
+    $stmt = $conn->prepare("INSERT INTO products (user_id, product_name, product_description, product_price, quantity) VALUES (?, ?, ?, ?, ?)");
+$stmt->bind_param("issdi", $user_id, $product_name, $product_description, $product_price, $product_quantity);
 
     if ($stmt->execute()) {
         $product_id = $stmt->insert_id;  // Get the product ID of the inserted product
