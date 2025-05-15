@@ -15,6 +15,7 @@ $stmt = $conn->prepare("
         p.product_name, 
         p.product_description, 
         p.product_price, 
+        p.quantity,
         pi.image_path 
     FROM 
         products p
@@ -35,6 +36,7 @@ if ($stmt->execute()) {
                 'product_name' => $row['product_name'],
                 'product_description' => $row['product_description'],
                 'product_price' => $row['product_price'],
+                'quantity' => $row['quantity'],
                 'images' => []
             ];
         }
