@@ -33,6 +33,7 @@ if ($stmt->execute()) {
         if (!isset($products[$product_id])) {
             // If it's the first time seeing this product, create an entry
             $products[$product_id] = [
+                'product_id' => $product_id, 
                 'product_name' => $row['product_name'],
                 'product_description' => $row['product_description'],
                 'product_price' => $row['product_price'],
