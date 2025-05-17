@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalPrice = document.getElementById('modalPrice');
   const modalQuantity = document.getElementById('modalQuantity');
   const swiperWrapper = document.getElementById('modalSwiperWrapper');
-
   // Initialize global swiper variable
   window.modalSwiper = null;
 
@@ -89,14 +88,15 @@ document.addEventListener('DOMContentLoaded', () => {
               }
             });
           });
+          window.currentProductId = product.product_id;
 
-          // Update modal content
-          modalName.textContent = product.product_name;
-          modalDescription.textContent = product.product_description;
-          modalPrice.textContent = `₱${product.product_price}`;
-          modalQuantity.textContent = `Quantity: ${product.quantity}`;
-
+          modalName.value = product.product_name;
+          modalDescription.value = product.product_description;
+          modalPrice.value = product.product_price;
+          modalQuantity.value = product.quantity;
+    
           modal.classList.remove('hidden');
+          
         });
       });
     })
@@ -115,4 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
       modal.classList.add('hidden');
     }
   });
+
+
 });
