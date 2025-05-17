@@ -18,7 +18,7 @@
     <button id="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
     
     <!-- Swiper carousel inside the modal -->
-    <div class="swiper w-full h-64 md:h-80 lg:h-96 mb-4 rounded" id="modalSwiper">
+    <div class="swiper w-full h-64 md:h-80 lg:h-80 mb-4 rounded" id="modalSwiper">
       <div class="swiper-wrapper" id="modalSwiperWrapper">
         <!-- Images will be injected here -->
       </div>
@@ -29,10 +29,29 @@
       <div class="swiper-pagination"></div>
     </div>
 
-    <h2 id="modalName" class="text-2xl font-bold mb-2"></h2>
-    <p id="modalDescription" class="text-gray-600 mb-2"></p>
-    <p id="modalPrice" class="text-amber-500 font-bold mb-2 text-lg"></p>
-    <p id="modalQuantity" class="text-gray-800 font-semibold mb-2"></p>
+    <form id="editProductForm" class="space-y-3">
+  <div>
+    <label class="block text-sm font-medium text-gray-700">Product Name</label>
+    <input id="modalName" type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
   </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700">Description</label>
+    <textarea id="modalDescription" class="w-full border border-gray-300 rounded px-3 py-2" rows="3"></textarea>
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700">Price</label>
+    <input id="modalPrice" type="number" step="0.01" class="w-full border border-gray-300 rounded px-3 py-2" />
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700">Quantity</label>
+    <input id="modalQuantity" type="number" class="w-full border border-gray-300 rounded px-3 py-2" />
+  </div>
+
+  <div class="text-right">
+    <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded">
+      Save Changes
+    </button>
+  </div>
+</form>
 </div>
 
