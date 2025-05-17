@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             product.images.forEach(img => {
               const slide = document.createElement('div');
               slide.className = 'swiper-slide';
-              slide.innerHTML = `<img src="${img}" class="w-full h-full object-cover rounded">`;
+              slide.innerHTML = `<img src="${img}" class="max-w-[500px] max-h-[300px] object-contain mx-auto rounded">`;
               swiperWrapper.appendChild(slide);
             });
           } else {
