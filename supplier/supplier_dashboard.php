@@ -202,6 +202,7 @@ $supplier = $result->fetch_assoc();
     </main>
     <script src="../js/fetch_products.js"></script>
     <script src="../js/product_submit.js"> </script>
+    <script src="../js/update-product.js"></script>
     <script>
         feather.replace();
 
