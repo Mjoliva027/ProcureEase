@@ -5,6 +5,32 @@
 <!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
+<style>
+  /* Make navigation buttons smaller */
+.swiper-button-next,
+.swiper-button-prev {
+  width: 50px;
+  height: 50px;
+  font-size: 12px;
+  background-color: rgba(0, 0, 0, 0.4); /* Optional: add a background for visibility */
+  border-radius: 9999px;
+  padding: 5px;
+}
+
+/* Optional: Change icon size inside buttons */
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 14px;
+}
+
+/* Make pagination bullets smaller */
+.swiper-pagination-bullet {
+  width: 6px;
+  height: 6px;
+}
+
+</style>
+
 <h2 class="text-3xl font-bold mb-6 text-amber-500">Your Posted Products</h2>
 <div id="productList" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
     
@@ -18,7 +44,7 @@
     <button id="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
     
     <!-- Swiper carousel inside the modal -->
-    <div class="swiper w-full h-64 md:h-80 lg:h-80 mb-4 rounded" id="modalSwiper">
+    <div class="swiper w-full h-40 md:h-40 lg:h-40 mb-4 rounded" id="modalSwiper">
       <div class="swiper-wrapper" id="modalSwiperWrapper">
         <!-- Images will be injected here -->
       </div>
