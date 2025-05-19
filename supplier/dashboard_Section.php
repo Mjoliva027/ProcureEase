@@ -39,35 +39,33 @@
             </div>
         </div>
     </div>
-    <div class="bg-white p-6 rounded-lg shadow mb-10">
-        <h3 class="text-2xl font-bold mb-4">Recent Activities</h3>
-        <ul class="space-y-4">
-            <li class="flex items-center space-x-4">
-                <i data-feather="plus-circle" class="text-amber-500"></i>
-                <span>Added new product <strong>Wireless Mouse</strong>.</span>
-            </li>
-            <li class="flex items-center space-x-4">
-                <i data-feather="edit" class="text-amber-500"></i>
-                <span>Updated price for <strong>Office Chair</strong>.</span>
-            </li>
-            <li class="flex items-center space-x-4">
-                <i data-feather="check-circle" class="text-amber-500"></i>
-                <span>Completed order #2345.</span>
-            </li>
-        </ul>
-    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-10">
+    <!-- Left: Order Status -->
     <div class="bg-white p-6 rounded-lg shadow">
-        <h3 class="text-2xl font-bold mb-4">Quick Actions</h3>
-        <div class="flex space-x-4">
-            <a href="#" class="flex items-center bg-amber-500 hover:bg-amber-600 text-white px-5 py-3 rounded-lg shadow transition">
-                <i data-feather="plus" class="mr-2"></i> Add Product
-            </a>
-            <a href="#" class="flex items-center bg-gray-800 hover:bg-gray-900 text-white px-5 py-3 rounded-lg shadow transition">
-                <i data-feather="refresh-cw" class="mr-2"></i> Update Stock
-            </a>
+        <h3 class="text-2xl font-bold mb-4">Latest Order Status</h3>
+        <div class="space-y-4">
+            <div class="flex items-center justify-between p-4 bg-gray-100 rounded-lg">
+                <span class="font-medium">Order #2345</span>
+                <span class="text-green-600 font-semibold">Received by Government</span>
+            </div>
+            <div class="flex items-center justify-between p-4 bg-gray-100 rounded-lg">
+                <span class="font-medium">Order #2346</span>
+                <span class="text-yellow-500 font-semibold">In Transit</span>
+            </div>
+            <div class="flex items-center justify-between p-4 bg-gray-100 rounded-lg">
+                <span class="font-medium">Order #2347</span>
+                <span class="text-red-500 font-semibold">Pending Dispatch</span>
+            </div>
         </div>
     </div>
 
+    <!-- Right: Sales Chart -->
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h3 class="text-2xl font-bold mb-4">Sales Overview</h3>
+        <canvas id="salesChart" height="100"></canvas>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
     fetch('total_products.php')
@@ -82,5 +80,45 @@
             document.getElementById('totalProductCount').textContent = 
                 'Failed to load count';
         });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const ctx = document.getElementById('salesChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Total Sales',
+                data: [1500, 1800, 1250, 2000, 2300, 1900], // Replace with dynamic data if needed
+                backgroundColor: 'rgba(251, 191, 36, 0.2)',
+                borderColor: 'rgba(251, 191, 36, 1)',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: true,
+                pointRadius: 5,
+                pointBackgroundColor: 'rgba(251, 191, 36, 1)'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Sales (₱)'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Month'
+                    }
+                }
+            }
+        }
+    });
 });
 </script>
