@@ -2,6 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+include('../includes/db_connect.php');
 
 header('Content-Type: application/json');
 
