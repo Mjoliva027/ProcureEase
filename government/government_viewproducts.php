@@ -1,98 +1,93 @@
 <?php
 include('../includes/db_connect.php');
 
-// Check if user is authorized
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'government') {
     header('Location: login.php');
     exit();
-}
-
-// Fetch products for government user
-$government_id = $_SESSION['user_id'];
-
-// Query to fetch all the products posted by suppliers
-$query = "
-    SELECT 
-        p.product_id,
-        p.product_name,
-        p.product_description,
-        p.product_price,
-        pi.image_path
-    FROM 
-        products AS p
-    LEFT JOIN 
-        product_images AS pi ON pi.product_id = p.product_id
-    ORDER BY 
-        p.created_at DESC
-";
-
-$suggestions_result = mysqli_query($conn, $query);
-
-// Check if the query was successful
-if (!$suggestions_result) {
-    die('Query failed: ' . mysqli_error($conn));
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>My Posted Products</title>
+    <meta charset="UTF-8" />
+    <title>View Products</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 p-6">
-    <h1 class="text-2xl font-bold text-amber-600 mb-4">Posted Products</h1>
-    <div id="productContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
-    <div class="mt-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <?php while($row = mysqli_fetch_assoc($suggestions_result)): ?>
-                <div class="bg-white p-4 rounded shadow">
-                    <!-- Display Product Images -->
-                    <?php if (!empty($row['image_path'])): ?>
-                        <div class="mb-4">
-                            <img src="../uploads/<?= htmlspecialchars($row['image_path']) ?>" class="w-full h-40 object-cover rounded" alt="Product Image">
-                        </div>
-                    <?php endif; ?>
+<h1 class="text-2xl font-bold text-amber-600 mb-6">Suggested Products</h1>
 
-                    <h3 class="text-xl font-semibold"><?= htmlspecialchars($row['product_name']) ?></h3>
-                    <p class="text-gray-600"><?= htmlspecialchars($row['product_description']) ?></p>
-                    <p class="mt-2 text-green-600 font-bold">₱<?= number_format($row['product_price'], 2) ?></p>
-                </div>
-            <?php endwhile; ?>
-        </div>
-    </div>
+<div id="productContainer" class="space-y-8">
+    <!-- Products will be loaded here by AJAX -->
+</div>
 
-    <script>
-    fetch('government_fetch_products.php')
-        .then(response => response.json())
-        .then(data => {
-            const container = document.getElementById('productContainer');
-            if (data.error) {
-                container.innerHTML = `<p class="text-red-600">${data.error}</p>`;
-                return;
-            }
-            data.forEach(product => {
-                const images = product.images.map(img =>
-                    `<img src="${img}" class="w-full h-40 object-cover rounded mb-2" alt="Product Image">`
-                ).join('');
+<script>
+// Fetch products and render them
+async function fetchProducts() {
+    try {
+        const response = await fetch('government_fetch_products.php');
+        const products = await response.json();
 
-                container.innerHTML += `
-                    <div class="bg-white p-4 rounded shadow">
-                        ${images}
-                        <h3 class="text-lg font-semibold">${product.product_name}</h3>
-                        <p class="text-gray-600">${product.product_description}</p>
-                        <p class="mt-2 text-green-600 font-bold">₱${parseFloat(product.product_price).toFixed(2)}</p>
+        const container = document.getElementById('productContainer');
+        container.innerHTML = '';
+
+        if (products.error) {
+            container.innerHTML = `<p class="text-red-600">${products.error}</p>`;
+            return;
+        }
+
+        products.forEach(product => {
+            const imagePath = product.images.length > 0 ? product.images[0] : null;
+            const productHtml = `
+                <div class="bg-white rounded-xl shadow-md p-4 max-w-[1000px] mx-auto">
+                    <div class="mb-2">
+                        <p class="text-base text-gray-700">${escapeHtml(product.product_description)}</p>
                     </div>
-                `;
-            });
-        })
-        .catch(error => {
-            document.getElementById('productContainer').innerHTML = 
-                `<p class="text-red-600">Failed to load products</p>`;
-            console.error(error);
+                    <div class="mb-4">
+                        ${imagePath ? 
+                            `<img src="../uploads/${escapeHtml(imagePath)}" class="w-full rounded-lg object-cover max-h-[300px]" alt="Product Image">` : 
+                            `<div class="bg-gray-200 text-gray-500 text-center py-20 rounded-lg">No Image Available</div>`
+                        }
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="text-xl font-bold">${escapeHtml(product.product_name)}</h2>
+                            <p class="text-green-600 text-lg font-semibold">₱${Number(product.product_price).toFixed(2)}</p>
+                        </div>
+                        <a href="government_order_product.php?product_id=${product.product_id}" 
+                           class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                           Order Now
+                        </a>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', productHtml);
         });
-    </script>
+
+    } catch (error) {
+        document.getElementById('productContainer').innerHTML = `<p class="text-red-600">Error loading products.</p>`;
+        console.error(error);
+    }
+}
+
+// Helper to escape HTML to avoid XSS
+function escapeHtml(text) {
+    if (!text) return '';
+    return text.replace(/[&<>"']/g, function(m) {
+        return ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        })[m];
+    });
+}
+
+// Load products on page load
+fetchProducts();
+</script>
+
 </body>
 </html>
