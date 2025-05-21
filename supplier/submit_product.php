@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['user_role'] == 'supplier'
     $product_quantity = $_POST['product_quantity'];
     $user_id = $_SESSION['user_id'];
 
-    $stmt = $conn->prepare("INSERT INTO products (user_id, product_name, product_description, product_price, quantity) VALUES (?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO products (user_id, product_name, product_description, product_price, product_quantity) VALUES (?, ?, ?, ?, ?)");
 $stmt->bind_param("issdi", $user_id, $product_name, $product_description, $product_price, $product_quantity);
 
     if ($stmt->execute()) {
