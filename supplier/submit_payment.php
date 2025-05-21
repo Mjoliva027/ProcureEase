@@ -33,7 +33,12 @@ $contact = $conn->real_escape_string($_POST['contact']);
 $payment_method = $conn->real_escape_string($_POST['payment_method']);
 $amount_sent = (float) $_POST['amount_sent'];
 $start_date = date('Y-m-d');
-$end_date = date('Y-m-d', strtotime('+1 month')); // You can change based on plan
+
+if (stripos($plan, 'yearly') !== false) {
+    $end_date = date('Y-m-d', strtotime('+1 year'));
+} else {
+    $end_date = date('Y-m-d', strtotime('+1 month'));
+}
 $status = 'pending';
 
 // Prepare SQL statement
