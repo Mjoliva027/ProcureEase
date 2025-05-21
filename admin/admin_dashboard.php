@@ -40,8 +40,8 @@ session_start();
         <a href="#" data-target="userModeration" class="nav-link flex items-center space-x-3 p-3 rounded hover:bg-gray-700">
             <i data-feather="user-check"></i><span class="sidebar-text">User Moderation</span>
         </a>
-        <a href="#" data-target="procurementReview" class="nav-link flex items-center space-x-3 p-3 rounded hover:bg-gray-700">
-            <i data-feather="file-text"></i><span class="sidebar-text">Procurement Review</span>
+        <a href="#" data-target="subscriptionReview" class="nav-link flex items-center space-x-3 p-3 rounded hover:bg-gray-700">
+            <i data-feather="file-text"></i><span class="sidebar-text">Subscription Review</span>
         </a>
         <a href="#" data-target="systemAnalytics" class="nav-link flex items-center space-x-3 p-3 rounded hover:bg-gray-700">
             <i data-feather="bar-chart-2"></i><span class="sidebar-text">System Analytics</span>
@@ -67,8 +67,8 @@ session_start();
         <?php include './user_moderation.php'; ?>
     </section>
 
-    <section id="procurementReview" class="hidden">
-        <?php include './procurement_review.php'; ?>
+    <section id="subscriptionReview" class="hidden">
+        <?php include './subscription_review.php'; ?>
     </section>
 
     <section id="systemAnalytics" class="hidden">
