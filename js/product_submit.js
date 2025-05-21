@@ -95,26 +95,29 @@ function submitProduct() {
         return;
     }
 
-    fetch('../supplier/submit_product.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.text())
-    .then(data => {
-        if (data.trim() === 'success') {
-            alert('Product posted successfully!');
-            loadProducts(); // Ensure loadProducts is called here after a successful submission
-            form.reset();
-            const imagePreview = document.getElementById('imagePreview');
-            if (imagePreview) {
-                imagePreview.innerHTML = ''; // Clear the image preview after submission
-            }
-        } else {
-            console.log('Error: ' + data);
+   fetch('../supplier/submit_product.php', {
+    method: 'POST',
+    body: formData
+})
+.then(response => response.text())
+.then(data => {
+    if (data.trim() === 'success') {
+        alert('Product posted successfully!');
+        loadProducts(); // Reload product list
+        form.reset();
+
+        const imagePreview = document.getElementById('imagePreview');
+        if (imagePreview) {
+            imagePreview.innerHTML = '';
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Something went wrong!');
-    });
+    } else if (data.trim() === 'limit_reached') {
+        alert('You’ve reached your limit of 5 products. Subscribe now to unlock full access.');
+    } else {
+        console.log('Error: ' + data);
+    }
+})
+.catch(error => {
+    console.error('Error:', error);
+    alert('Something went wrong!');
+});
 }

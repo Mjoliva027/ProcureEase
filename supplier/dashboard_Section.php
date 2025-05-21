@@ -1,5 +1,31 @@
+<?php
+include('../includes/db_connect.php');
 
-    <h2 class="text-3xl font-bold mb-6 text-amber-500">Dashboard</h2>
+$showSubscriptionNotice = true;
+
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+
+    $stmt = $conn->prepare("SELECT status, end_date FROM subscription_payments WHERE user_id = ? ORDER BY id DESC LIMIT 1");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($row = $result->fetch_assoc()) {
+        $status = $row['status'];
+        $end_date = $row['end_date'];
+        $today = date('Y-m-d');
+
+        if ($status === 'approved' && $end_date >= $today) {
+            $showSubscriptionNotice = false;
+        }
+    }
+
+    $stmt->close();
+}
+?>
+   
+   <h2 class="text-3xl font-bold mb-6 text-amber-500">Dashboard</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         <div class="bg-white p-6 rounded-lg shadow flex items-center space-x-4">
             <div class="bg-amber-500 p-3 rounded-full">
@@ -66,9 +92,14 @@
     </div>
 </div>
 
- <div class="bg-yellow-200 p-4 mt-4 rounded text-yellow-800">
-        <p>You are viewing limited product suggestions.<a href="javascript:void(0)" onclick="openModal('subscriptionModal')" class="underline text-amber-500">Subscribe now</a> to unlock full access.</p>
+ <?php if ($showSubscriptionNotice): ?>
+    <div class="bg-yellow-200 p-4 mt-4 rounded text-yellow-800">
+        <p>You are viewing limited product suggestions.
+            <a href="javascript:void(0)" onclick="openModal('subscriptionModal')" class="underline text-amber-500">Subscribe now</a>
+            to unlock full access.
+        </p>
     </div>
+<?php endif; ?>
 
     <!-- Subscription Modal -->
 <div id="subscriptionModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center">
@@ -99,7 +130,7 @@
   <div class="bg-white p-6 rounded-lg w-full max-w-4xl relative max-h-[90vh]">
     <h3 class="text-xl font-bold mb-4 text-amber-600">Complete Your Payment</h3>
 
-    <form id="paymentForm">
+   <form id="paymentForm" enctype="multipart/form-data">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <!-- Left Column -->
         <div>
@@ -182,6 +213,7 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="../js/submit_payment.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   loadTotalProductCount();

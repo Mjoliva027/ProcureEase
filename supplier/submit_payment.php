@@ -1,11 +1,15 @@
 <?php
-// DB connection
 include('../includes/db_connect.php');
+session_start();
+header('Content-Type: application/json');
 
-// Check for connection error
-if ($conn->connect_error) {
-    die(json_encode(['success' => false, 'message' => 'Database connection failed.']));
+// Ensure user is logged in
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(['success' => false, 'message' => 'User not logged in.']);
+    exit;
 }
+
+$user_id = $_SESSION['user_id'];
 
 // Handle file upload
 $proofPath = '';
@@ -21,23 +25,38 @@ if (isset($_FILES['proof']) && $_FILES['proof']['error'] === 0) {
     }
 }
 
-// Sanitize & retrieve POST data
+// Get and sanitize data
 $plan = $conn->real_escape_string($_POST['plan']);
 $amount = (float) $_POST['amount'];
 $name = $conn->real_escape_string($_POST['name']);
 $contact = $conn->real_escape_string($_POST['contact']);
 $payment_method = $conn->real_escape_string($_POST['payment_method']);
 $amount_sent = (float) $_POST['amount_sent'];
-$date_paid = date('Y-m-d H:i:s');
+$start_date = date('Y-m-d');
+$end_date = date('Y-m-d', strtotime('+1 month')); // You can change based on plan
+$status = 'pending';
 
-// Insert into database
-$sql = "INSERT INTO subscription (plan, amount, name, contact, payment_method, amount_sent, proof, date_paid)
-        VALUES ('$plan', $amount, '$name', '$contact', '$payment_method', $amount_sent, '$proofPath', '$date_paid')";
+// Prepare SQL statement
+$stmt = $conn->prepare("INSERT INTO subscription_payments 
+    (user_id, full_name, contact_number, payment_method, plan_type, plan_amount, amount_sent, proof_image, start_date, end_date, status) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-if ($conn->query($sql)) {
-    echo json_encode(['success' => true, 'message' => 'Payment submitted successfully.']);
-} else {
-    echo json_encode(['success' => false, 'message' => 'Database error: ' . $conn->error]);
+if (!$stmt) {
+    echo json_encode(['success' => false, 'message' => 'Prepare failed: ' . $conn->error]);
+    exit;
 }
 
+// Correct bind types: i = int, s = string, d = double
+$stmt->bind_param("isssssdssss", 
+    $user_id, $name, $contact, $payment_method, $plan, $amount, $amount_sent, $proofPath, $start_date, $end_date, $status
+);
+
+if ($stmt->execute()) {
+    echo json_encode(['success' => true, 'message' => 'Payment submitted successfully.']);
+} else {
+    echo json_encode(['success' => false, 'message' => 'Execution failed: ' . $stmt->error]);
+}
+
+$stmt->close();
 $conn->close();
+?>
