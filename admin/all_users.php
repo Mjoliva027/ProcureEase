@@ -1,13 +1,20 @@
 <?php
 require '../includes/db_connect.php';
 
-// Get filter from query string
+// Get filters from query string
 $filter = isset($_GET['role']) ? $_GET['role'] : '';
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
 // Build dynamic WHERE clause
 $whereClause = "WHERE u.is_new = 0";
+
 if ($filter && in_array($filter, ['admin', 'supplier', 'government'])) {
     $whereClause .= " AND u.role = '" . mysqli_real_escape_string($conn, $filter) . "'";
+}
+
+if (!empty($search)) {
+    $escapedSearch = mysqli_real_escape_string($conn, $search);
+    $whereClause .= " AND (u.name LIKE '%$escapedSearch%' OR u.email LIKE '%$escapedSearch%')";
 }
 
 // SQL query
@@ -31,7 +38,6 @@ $query = "
 ";
 
 $result = mysqli_query($conn, $query);
-
 if (!$result) {
     die("Query failed: " . mysqli_error($conn));
 }
@@ -40,12 +46,22 @@ if (!$result) {
 <div class="bg-white p-6 rounded shadow">
     <h3 class="text-xl font-bold mb-4">All Users (Admins, Governments, Suppliers)</h3>
 
+    <!-- Search + Filter -->
+    <form method="get" class="mb-4 flex flex-wrap items-center gap-2">
+        <input type="hidden" name="role" value="<?= htmlspecialchars($filter) ?>">
+        <input type="text" name="search" placeholder="Search by name or email..." value="<?= htmlspecialchars($search) ?>"
+               class="px-3 py-2 border rounded w-64">
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Search</button>
+        <?php if (!empty($search)): ?>
+            <a href="?role=<?= urlencode($filter) ?>" class="text-sm text-red-500 ml-2">Clear search</a>
+        <?php endif; ?>
+    </form>
+
     <!-- Filter Buttons -->
-    <div class="mb-4">
-        <a href="?role=" class="px-4 py-2 rounded <?= $filter == '' ? 'bg-blue-600 text-white' : 'bg-gray-200' ?>">All</a>
-        <a href="?role=admin" class="px-4 py-2 rounded <?= $filter == 'admin' ? 'bg-blue-600 text-white' : 'bg-gray-200' ?>">Admin</a>
-        <a href="?role=government" class="px-4 py-2 rounded <?= $filter == 'government' ? 'bg-blue-600 text-white' : 'bg-gray-200' ?>">Government</a>
-        <a href="?role=supplier" class="px-4 py-2 rounded <?= $filter == 'supplier' ? 'bg-blue-600 text-white' : 'bg-gray-200' ?>">Supplier</a>
+    <div class="mb-4 space-x-2">
+        <a href="?role=&search=<?= urlencode($search) ?>" class="px-4 py-2 rounded <?= $filter == '' ? 'bg-blue-600 text-white' : 'bg-gray-200' ?>">All</a>
+        <a href="?role=government&search=<?= urlencode($search) ?>" class="px-4 py-2 rounded <?= $filter == 'government' ? 'bg-blue-600 text-white' : 'bg-gray-200' ?>">Government</a>
+        <a href="?role=supplier&search=<?= urlencode($search) ?>" class="px-4 py-2 rounded <?= $filter == 'supplier' ? 'bg-blue-600 text-white' : 'bg-gray-200' ?>">Supplier</a>
     </div>
 
     <div class="overflow-x-auto">
@@ -89,7 +105,7 @@ if (!$result) {
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="6" class="text-center px-4 py-4 text-gray-500">No users found for this role.</td>
+                        <td colspan="6" class="text-center px-4 py-4 text-gray-500">No users found.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
