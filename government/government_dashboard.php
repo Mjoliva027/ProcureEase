@@ -163,70 +163,131 @@ if ($result && $result->num_rows > 0) {
 <main class="bg-gray-100 p-6 min-h-screen">
     <?php
     switch ($page) {
-        case 'home':
-            // Fetch Suggested Products (limit 3) with supplier name
-            $suggestions_query = "
-                SELECT p.*, s.company_name 
-                FROM products p 
-                LEFT JOIN suppliers s ON p.user_id = s.user_id
-                ORDER BY p.created_at DESC LIMIT 3
-            ";
-            $suggestions_result = mysqli_query($conn, $suggestions_query);
-            ?>
+    case 'home':
+    $suggestions_query = "
+        SELECT p.*, s.company_name 
+        FROM products p 
+        LEFT JOIN suppliers s ON p.user_id = s.user_id
+        ORDER BY p.created_at DESC LIMIT 3
+    ";
+    $suggestions_result = mysqli_query($conn, $suggestions_query);
+    ?>
+<!--Improved Hero Section -->
+<section class="flex flex-col-reverse lg:flex-row items-center gap-16 mb-16 px-4 max-w-7xl mx-auto">
+    <div class="lg:w-1/2 text-center lg:text-left">
+        <h1 class="text-5xl font-extrabold leading-tight text-amber-600 mb-6">
+            Streamline Government Procurement with ProcureEase
+        </h1>
+        <p class="text-lg text-gray-700 mb-10 max-w-xl mx-auto lg:mx-0">
+            Connect with trusted suppliers, simplify purchasing, and maintain full transparency on all transactions.
+        </p>
+        <a href="?page=products" class="inline-block bg-amber-500 text-white px-10 py-4 rounded-lg font-semibold shadow-lg hover:bg-amber-600 transition">
+            Browse Products
+        </a>
+    </div>
+    <div class="lg:w-1/2">
+<img src="../image/logo2.png" alt="Government procurement" class="rounded-lg shadow-lg mx-auto max-w-64" /></section>
 
-            <h1 class="text-2xl font-bold text-amber-600 mb-4">Suggested Products</h1>
-
-            <div id="productContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                <?php while($product = mysqli_fetch_assoc($suggestions_result)): ?>
-                    <div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col h-full">
-                        <?php
-                        $image_query = "SELECT image_path FROM product_images WHERE product_id = " . intval($product['product_id']) . " LIMIT 1";
-                        $image_result = mysqli_query($conn, $image_query);
-                        $image = mysqli_fetch_assoc($image_result);
-                        ?>
-                        <?php if ($image): ?>
-                            <img src="../uploads/<?= htmlspecialchars($image['image_path']) ?>" class="w-full h-48 object-cover rounded-t-lg" alt="Product Image" />
-                        <?php else: ?>
-                            <p class="text-center text-gray-500 p-4">No Image Available</p>
-                        <?php endif; ?>
-
-                        <div class="flex-1 p-4">
-                            <h3 class="text-lg font-semibold text-center"><?= htmlspecialchars($product['product_name']) ?></h3>
-                            <p class="text-sm text-gray-600 text-center mb-2"><?= htmlspecialchars($product['product_description']) ?></p>
-                            <p class="text-lg font-semibold text-center text-green-600">₱<?= number_format($product['product_price'], 2) ?></p>
-                        </div>
-
-                        <?php
-                        // Fetch all images for modal
-                        $images_query = "SELECT image_path FROM product_images WHERE product_id = " . intval($product['product_id']);
-                        $images_result = mysqli_query($conn, $images_query);
-                        $images = [];
-                        while($img = mysqli_fetch_assoc($images_result)) {
-                            $images[] = $img['image_path'];
-                        }
-                        ?>
-                        <div class="p-4">
-                            <button
-                                class="w-full text-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 view-product-btn"
-                                data-product='<?= json_encode([
-                                    'id' => $product['product_id'],
-                                    'name' => $product['product_name'],
-                                    'description' => $product['product_description'],
-                                    'price' => number_format($product['product_price'], 2),
-                                    'images' => $images,
-                                    'supplier' => $product['company_name'] ?? 'Unknown Supplier'
-                                ], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT) ?>'
-                            >
-                                View Product
-                            </button>
-                        </div>
-                    </div>
-                <?php endwhile; ?>
+<!-- ======= Improved Features Section ======= -->
+<section class="mb-16 px-4 max-w-7xl mx-auto">
+    <h2 class="text-3xl font-bold text-amber-600 mb-12 text-center">Why Choose ProcureEase?</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div class="bg-white rounded-lg p-8 shadow-md hover:shadow-lg transition flex flex-col items-center text-center">
+            <div class="text-amber-500 mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
             </div>
+            <h3 class="text-xl font-semibold mb-3">Transparent Transactions</h3>
+            <p class="text-gray-600 max-w-xs">Clear audit trails for every purchase to maintain accountability and trust.</p>
+        </div>
+        <div class="bg-white rounded-lg p-8 shadow-md hover:shadow-lg transition flex flex-col items-center text-center">
+            <div class="text-amber-500 mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-2" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">Efficient Procurement</h3>
+            <p class="text-gray-600 max-w-xs">Simplify processes with an easy-to-use platform tailored for government.</p>
+        </div>
+        <div class="bg-white rounded-lg p-8 shadow-md hover:shadow-lg transition flex flex-col items-center text-center">
+            <div class="text-amber-500 mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">Trusted Suppliers</h3>
+            <p class="text-gray-600 max-w-xs">Access a vetted network ensuring quality and fair pricing.</p>
+        </div>
+    </div>
+</section>
 
+<section aria-labelledby="suggested-products-title" class="max-w-6xl mx-auto px-6 py-12">
+    <h2 id="suggested-products-title" class="text-3xl font-extrabold text-amber-600 mb-12 text-center">
+        Latest Products
+    </h2>
+
+    <div id="productContainer" class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <?php while($product = mysqli_fetch_assoc($suggestions_result)): ?>
             <?php
-            break;
+            $image_query = "SELECT image_path FROM product_images WHERE product_id = " . intval($product['product_id']) . " LIMIT 1";
+            $image_result = mysqli_query($conn, $image_query);
+            $image = mysqli_fetch_assoc($image_result);
 
+            $images_query = "SELECT image_path FROM product_images WHERE product_id = " . intval($product['product_id']);
+            $images_result = mysqli_query($conn, $images_query);
+            $images = [];
+            while($img = mysqli_fetch_assoc($images_result)) {
+                $images[] = $img['image_path'];
+            }
+            ?>
+            <article class="bg-white rounded-lg border border-gray-200 hover:border-amber-500 transition-colors duration-200 flex flex-col">
+                <?php if ($image): ?>
+                    <img
+                        src="../uploads/<?= htmlspecialchars($image['image_path']) ?>"
+                        alt="<?= htmlspecialchars($product['product_name']) ?>"
+                        class="w-full h-40 object-cover rounded-t-lg"
+                        loading="lazy"
+                    />
+                <?php else: ?>
+                    <div class="flex items-center justify-center h-40 bg-gray-50 rounded-t-lg text-gray-400 text-sm font-medium">
+                        No Image Available
+                    </div>
+                <?php endif; ?>
+
+                <div class="p-5 flex flex-col items-center text-center space-y-4">
+                    <h3 class="text-lg font-semibold text-gray-900">
+                        <?= htmlspecialchars($product['product_name']) ?>
+                    </h3>
+                    <p class="text-green-700 font-medium text-lg">₱<?= number_format($product['product_price'], 2) ?></p>
+                    <button
+                        type="button"
+                        class="text-amber-600 font-semibold hover:underline focus:outline-none"
+                        data-product='<?= json_encode([
+                            'id' => $product['product_id'],
+                            'name' => $product['product_name'],
+                            'description' => $product['product_description'],
+                            'price' => number_format($product['product_price'], 2),
+                            'images' => $images,
+                            'supplier' => $product['company_name'] ?? 'Unknown Supplier'
+                        ], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT) ?>'
+                        aria-label="View details for <?= htmlspecialchars($product['product_name']) ?>"
+                    >
+                        View Details
+                    </button>
+                    <p class="text-xs text-gray-500 italic mt-1">
+                        Supplier: <?= htmlspecialchars($product['company_name'] ?? 'Unknown Supplier') ?>
+                    </p>
+                </div>
+            </article>
+        <?php endwhile; ?>
+    </div>
+</section>
+<?php
+break;
         case 'products':
             include 'government_viewproducts.php';
             break;
@@ -246,6 +307,18 @@ if ($result && $result->num_rows > 0) {
     }
     ?>
 </main>
+
+<footer class="bg-gray-100 text-gray-700 py-8 mt-16">
+  <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+    <p class="text-sm">&copy; <?= date('Y') ?> ProcureEase. All rights reserved.</p>
+    <nav class="space-x-6 mt-4 md:mt-0">
+      <a href="?page=about" class="hover:underline">About</a>
+      <a href="?page=contact" class="hover:underline">Contact</a>
+      <a href="?page=privacy" class="hover:underline">Privacy Policy</a>
+    </nav>
+  </div>
+</footer>
+
 
 <!-- Product View Modal -->
 <div id="productViewModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">

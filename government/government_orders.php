@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'government') {
 
 $government_id = $_SESSION['user_id'];
 
-$query = "SELECT o.product_id, o.agency, o.amount, o.status, o.created_at, o.proof_image_path, 
+$query = "SELECT o.product_id, o.agency, o.amount, o.status, o.created_at,
                  p.product_name, p.product_description 
           FROM orders o 
           JOIN products p ON o.product_id = p.product_id 
@@ -56,14 +56,6 @@ $result = $stmt->get_result();
                         <p class="text-gray-500 text-xs mt-2">
                             Ordered on: <?= date("F j, Y g:i A", strtotime($row['created_at'])) ?>
                         </p>
-
-                        <?php if (!empty($row['proof_image_path'])): ?>
-                            <a href="../uploads/proofs/<?= urlencode($row['proof_image_path']) ?>" 
-                               target="_blank" 
-                               class="inline-block mt-4 text-blue-600 underline text-sm">
-                                View Proof of Payment
-                            </a>
-                        <?php endif; ?>
                     </div>
                 <?php endwhile; ?>
             </div>

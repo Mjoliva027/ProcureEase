@@ -6,7 +6,12 @@ header('Content-Type: application/json');
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-$stmt = $conn->prepare("
+// Get filters
+$search = $_GET['q'] ?? '';
+$min = $_GET['min'] ?? '';
+$max = $_GET['max'] ?? '';
+
+$query = "
     SELECT 
         p.product_id,           
         p.product_name, 
@@ -17,17 +22,50 @@ $stmt = $conn->prepare("
         products p
     LEFT JOIN 
         product_images pi ON p.product_id = pi.product_id
-");
+";
+
+// Build WHERE clause
+$conditions = [];
+$params = [];
+$types = "";
+
+if ($search) {
+    $conditions[] = "(p.product_name LIKE ? OR p.product_description LIKE ?)";
+    $params[] = "%$search%";
+    $params[] = "%$search%";
+    $types .= "ss";
+}
+if (is_numeric($min)) {
+    $conditions[] = "p.product_price >= ?";
+    $params[] = $min;
+    $types .= "d";
+}
+if (is_numeric($max)) {
+    $conditions[] = "p.product_price <= ?";
+    $params[] = $max;
+    $types .= "d";
+}
+
+if ($conditions) {
+    $query .= " WHERE " . implode(" AND ", $conditions);
+} else {
+    $query .= " ORDER BY RAND()"; // Only apply randomization when no filters
+}
+
+$stmt = $conn->prepare($query);
+if ($types) {
+    $stmt->bind_param($types, ...$params);
+}
 
 if ($stmt->execute()) {
     $result = $stmt->get_result();
     $products = [];
 
     while ($row = $result->fetch_assoc()) {
-        $product_id = $row['product_id'];
-        if (!isset($products[$product_id])) {
-            $products[$product_id] = [
-                'product_id' => $product_id,
+        $id = $row['product_id'];
+        if (!isset($products[$id])) {
+            $products[$id] = [
+                'product_id' => $id,
                 'product_name' => $row['product_name'],
                 'product_description' => $row['product_description'],
                 'product_price' => $row['product_price'],
@@ -35,7 +73,7 @@ if ($stmt->execute()) {
             ];
         }
         if ($row['image_path']) {
-            $products[$product_id]['images'][] = $row['image_path'];
+            $products[$id]['images'][] = $row['image_path'];
         }
     }
 

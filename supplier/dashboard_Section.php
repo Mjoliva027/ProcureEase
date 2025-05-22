@@ -241,35 +241,42 @@ function renderSalesChart() {
   const ctx = document.getElementById('salesChart')?.getContext('2d');
   if (!ctx) return;
 
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-      datasets: [{
-        label: 'Total Sales',
-        data: [1500, 1800, 1250, 2000, 2300, 1900],
-        backgroundColor: 'rgba(251, 191, 36, 0.2)',
-        borderColor: 'rgba(251, 191, 36, 1)',
-        borderWidth: 2,
-        tension: 0.3,
-        fill: true,
-        pointRadius: 5,
-        pointBackgroundColor: 'rgba(251, 191, 36, 1)'
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true,
-          title: { display: true, text: 'Sales (₱)' }
+  fetch('../supplier/get-sales-chart.php')
+    .then(res => res.json())
+    .then(({ labels, data }) => {
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Total Sales',
+            data,
+            backgroundColor: 'rgba(251, 191, 36, 0.2)',
+            borderColor: 'rgba(251, 191, 36, 1)',
+            borderWidth: 2,
+            tension: 0.3,
+            fill: true,
+            pointRadius: 5,
+            pointBackgroundColor: 'rgba(251, 191, 36, 1)'
+          }]
         },
-        x: {
-          title: { display: true, text: 'Month' }
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: 'Sales (₱)' }
+            },
+            x: {
+              title: { display: true, text: 'Month' }
+            }
+          }
         }
-      }
-    }
-  });
+      });
+    })
+    .catch(err => {
+      console.error('Error fetching sales data:', err);
+    });
 }
 
 /** Setup modal click-outside to close */

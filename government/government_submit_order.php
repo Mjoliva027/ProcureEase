@@ -13,6 +13,7 @@ $full_name = $_POST['full_name'];
 $location = $_POST['location'];
 $agency = $_POST['agency'];
 $payment_method = $_POST['payment_method'];
+$gcash_number = $_POST['gcash_number'];
 $amount = $_POST['amount'];
 
 // File upload
@@ -29,22 +30,23 @@ $target_file = $target_dir . $unique_filename;
 if (move_uploaded_file($_FILES["proof_image"]["tmp_name"], $target_file)) {
     // File moved successfully, continue with DB insert
 
-    $query = "INSERT INTO orders (product_id, user_id, full_name, location, agency, payment_method, amount, proof_of_payment, status, created_at)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', NOW())";
+   $query = "INSERT INTO orders (
+    product_id, user_id, full_name, location, agency, payment_method, gcash_number, amount, proof_of_payment, status, created_at
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', NOW())";
 
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param(
-        'iissssds',
-        $product_id,
-        $_SESSION['user_id'],
-        $full_name,
-        $location,
-        $agency,
-        $payment_method,
-        $amount,
-        $unique_filename // Save only the filename, not the full path
-    );
-
+$stmt = $conn->prepare($query);
+$stmt->bind_param(
+    'iissssdss',
+    $product_id,
+    $_SESSION['user_id'],
+    $full_name,
+    $location,
+    $agency,
+    $payment_method,
+    $gcash_number,
+    $amount,
+    $unique_filename
+);
     if ($stmt->execute()) {
         echo "<script>alert('Order submitted successfully!'); window.location.href = 'government_dashboard.php?';</script>";
     } else {
