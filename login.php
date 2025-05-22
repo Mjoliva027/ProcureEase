@@ -12,7 +12,7 @@
 
   <!-- Left Banner -->
 <div class="w-1/2 bg-gray-800 text-white flex flex-col justify-center items-center px-10 py-20 space-y-6 rounded-br-[50px] rounded-tr-[50px]">
-  <img src="https://via.placeholder.com/100/F59E0B/FFFFFF?text=Logo" alt="Logo" class="rounded bg-white p-2" />
+  <img src="./image/logo2.png" alt="Logo" class="rounded-lg shadow-lg mx-auto max-w-52 bg-white" />
   <h1 class="text-4xl font-extrabold text-amber-400">ProcureEase</h1>
   <p class="text-center text-gray-300 text-lg max-w-md">
     Trusted by local suppliers and government agencies for seamless and transparent procurement.

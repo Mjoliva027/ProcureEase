@@ -171,14 +171,14 @@ if (isset($_SESSION['user_id'])) {
           <!-- GCash Info -->
           <div id="gcashInfo" class="hidden mb-4 bg-gray-50 p-4 rounded border">
             <p class="font-medium mb-2">Scan this QR Code or send to the number below:</p>
-            <img src="path-to-your-gcash-qr.png" alt="GCash QR Code" class="w-32 mb-2">
+            <img src="../image/gcash_qr.png" alt="GCash QR Code" class="w-32 mb-2">
             <p class="text-sm text-gray-700">GCash Number: <strong>0917-XXXXXXX</strong></p>
           </div>
 
           <!-- PayPal Info -->
           <div id="paypalInfo" class="hidden mb-4 bg-gray-50 p-4 rounded border">
             <p class="font-medium mb-2">Scan this PayPal QR Code or send to the email below:</p>
-            <img src="path-to-your-paypal-qr.png" alt="PayPal QR Code" class="w-32 mb-2">
+            <img src="../image/paypal_qr.png" alt="PayPal QR Code" class="w-32 mb-2">
             <p class="text-sm text-gray-700">PayPal Email: <strong>your-email@paypal.com</strong></p>
           </div>
 

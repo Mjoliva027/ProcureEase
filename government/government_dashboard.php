@@ -129,13 +129,13 @@ if ($result && $result->num_rows > 0) {
             <!-- GCash QR Code -->
             <div id="gcashQRCode" class="md:col-span-2 mt-4 hidden">
                 <label class="block font-semibold text-gray-700 mb-2">Scan this GCash QR Code:</label>
-                <img src="path/to/your-gcash-qr-code.png" alt="GCash QR Code" class="mx-auto w-32 object-contain" />
+                <img src="../image/gcash_qr.png" alt="GCash QR Code" class="mx-auto w-32 object-contain" />
             </div>
 
             <!-- PayPal QR Code -->
             <div id="paypalQRCode" class="md:col-span-2 mt-4 hidden">
                 <label class="block font-semibold text-gray-700 mb-2">Pay with PayPal using this QR Code:</label>
-                <img src="path/to/your-paypal-qr-code.png" alt="PayPal QR Code" class="mx-auto w-32 object-contain" />
+                <img src="../image/paypal_qr.png" alt="PayPal QR Code" class="mx-auto w-32 object-contain" />
             </div>
 
             <div class="md:col-span-2">
