@@ -1,6 +1,5 @@
 <?php
 include('../includes/db_connect.php');
-
 header('Content-Type: application/json');
 session_start();
 
@@ -11,7 +10,12 @@ if (!$user_id) {
     exit;
 }
 
-$product_id = 2; // Or get from input/session
+$product_id = isset($_GET['product_id']) ? (int)$_GET['product_id'] : 0;
+
+if (!$product_id) {
+    echo json_encode(['error' => 'Product ID not provided']);
+    exit;
+}
 
 $query = "
     SELECT 
@@ -19,13 +23,14 @@ $query = "
         SUM(amount) AS total_sales
     FROM orders
     WHERE product_id = ?
+      AND status = 'accepted'
       AND YEAR(created_at) = YEAR(CURDATE())
     GROUP BY MONTH(created_at)
     ORDER BY MONTH(created_at)
 ";
 
 $stmt = $conn->prepare($query);
-$stmt->bind_param('i', $product_id); // Bind the parameter here
+$stmt->bind_param('i', $product_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
