@@ -13,24 +13,16 @@ $government_id = $_SESSION['user_id'];
 $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 
 $subscribed = false;
+$today = date('Y-m-d');
 
-// Prepare and execute subscription check query
-// Only consider payments with status 'approved' or 'active' (whichever you use)
-$query = "SELECT * FROM subscription_payments WHERE user_id = ? AND status = 'approved' LIMIT 1";
-
+$query = "SELECT * FROM subscription_payments WHERE user_id = ? AND status = 'approved' AND ? BETWEEN start_date AND end_date LIMIT 1";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("i", $government_id);
+$stmt->bind_param("is", $government_id, $today);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result && $result->num_rows > 0) {
-    $subscription = $result->fetch_assoc();
-    $today = date('Y-m-d');
-
-    // Check if today's date is within the subscription period
-    if ($today >= $subscription['start_date'] && $today <= $subscription['end_date']) {
-        $subscribed = true;
-    }
+    $subscribed = true;
 }
 ?>
 

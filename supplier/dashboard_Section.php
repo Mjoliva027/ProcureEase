@@ -2,7 +2,6 @@
 include('../includes/db_connect.php');
 
 $showSubscriptionNotice = true;
-
 if (isset($_SESSION['user_id'])) {
   $user_id = $_SESSION['user_id'];
 
