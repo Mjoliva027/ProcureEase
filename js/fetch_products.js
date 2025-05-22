@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
           modalName.value = product.product_name;
           modalDescription.value = product.product_description;
           modalPrice.value = product.product_price;
-          modalQuantity.value = product.quantity;
+          modalQuantity.value = product.product_quantity;
     
           modal.classList.remove('hidden');
           

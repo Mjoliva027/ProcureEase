@@ -1,5 +1,5 @@
 <?php
-require_once '../includes/db_connect.php'; // Adjust the path if needed
+require_once '../includes/db_connect.php';
 header('Content-Type: application/json');
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 // Decode JSON input
 $data = json_decode(file_get_contents("php://input"), true);
 
-// Check if JSON decoding worked
+// Validate JSON
 if ($data === null) {
     echo json_encode(['success' => false, 'message' => 'Invalid JSON input']);
     exit;
@@ -19,25 +19,25 @@ if (
     !isset($data['product_name']) ||
     !isset($data['product_description']) ||
     !isset($data['product_price']) ||
-    !isset($data['quantity'])
+    !isset($data['product_quantity'])
 ) {
     echo json_encode(['success' => false, 'message' => 'Missing required fields']);
     exit;
 }
 
-// Sanitize & assign variables
+// Sanitize and assign
 $id = intval($data['product_id']);
 $name = trim($data['product_name']);
 $description = trim($data['product_description']);
 $price = floatval($data['product_price']);
-$quantity = intval($data['quantity']);
+$quantity = intval($data['product_quantity']);
 
-// Prepare and execute update with error handling
+// Prepare update
 $stmt = $conn->prepare("UPDATE products SET 
     product_name = ?, 
     product_description = ?, 
     product_price = ?, 
-    quantity = ?
+    product_quantity = ?
     WHERE product_id = ?");
 
 if (!$stmt) {
@@ -59,3 +59,4 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
+?>
